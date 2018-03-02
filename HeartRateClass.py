@@ -77,7 +77,7 @@ class HeartRate(object):
         """
         import logging
 
-        dur = self.df.iloc[:,0].tail(n=1)
+        dur = self.df.iloc[:, 0].tail(n=1)
         self.duration = dur[0]
         logging.info('Duration determined with success.')
 
