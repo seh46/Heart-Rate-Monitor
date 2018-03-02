@@ -7,3 +7,6 @@ dependencies:
         - pytest-pep8
         - pytest-cov
         - sphinx
+        - pandas
+        - logging
+        - scipy
