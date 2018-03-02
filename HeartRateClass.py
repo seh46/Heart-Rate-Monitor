@@ -11,7 +11,7 @@ class HeartRate(object):
         voltageExtremes (maximum and minimum voltages present in ECG reading)
     """
 
-    def __init__ (self, data_file, interval=0.25):
+    def __init__(self, data_file, interval=0.25):
         """Initialize HeartRate object with data file and interval to measure
         heart rate
 
@@ -37,8 +37,8 @@ class HeartRate(object):
             self.df = None
 
         try:
-            self.endval = self.df.iloc[:, 0].tail(n=1)
-            if interval/60 > self.endval.iloc[0]:
+            endval = self.df.iloc[:, 0].tail(n=1)
+            if interval/60 > endval.iloc[0]:
                 raise ValueError
             if type(interval) != int and type(interval) != float:
                 raise TypeError
@@ -66,10 +66,9 @@ class HeartRate(object):
         width_min = round(.03/data_int_size, 0)
         width_max = round(0.1/data_int_size, 0)
         volts = self.df.iloc[:, 1]
-        self.avg = volts.mean()
         beat_indices = scs.find_peaks_cwt(volts, widths=np.arange(width_min,
                                                                   width_max))
-        self.beats = [self.df.iloc[i,0] for i in beat_indices]
+        self.beats = [self.df.iloc[i, 0] for i in beat_indices]
 
     def get_duration(self):
         """ Find duration of input ECG strip

@@ -44,6 +44,7 @@ def test_get_duration():
     t5.get_duration()
     assert t5.duration == 13.887
 
+
 def test_findmeanhr():
     from numpy import isclose
 
@@ -81,7 +82,7 @@ def test_numbeats():
     assert isclose(t4.num_beats, 35, atol=3)
     t5 = hrc.HeartRate('test_data31.csv')
     t5.numBeats()
-    assert isclose(t5.num_beats,19, atol=3)
+    assert isclose(t5.num_beats, 19, atol=3)
 
 
 def test_voltageextremes():
