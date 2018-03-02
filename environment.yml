@@ -8,5 +8,4 @@ dependencies:
         - pytest-cov
         - sphinx
         - pandas
-        - logging
         - scipy
