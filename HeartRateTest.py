@@ -7,19 +7,23 @@ def test_beattimes():
 
     t1 = hrc.HeartRate('test_data1.csv')
     t1.beat_times()
-    assert allclose(t1.beats[0:5], [0.214, 1.028, 1.842, 2.631, 3.419], rtol=1e-01)
+    assert allclose(t1.beats[0:5], [0.214, 1.028, 1.842, 2.631, 3.419],
+                    rtol=1e-01)
     t2 = hrc.HeartRate('test_data2.csv')
     t2.beat_times()
     assert allclose(t2.beats[0:5], [0.228, 1.1, 1.975, 2.867, 3.8], rtol=1e-01)
     t3 = hrc.HeartRate('test_data8.csv')
     t3.beat_times()
-    assert allclose(t3.beats[0:5], [0.744, 1.569, 2.447, 3.339, 4.208], rtol=1e-01)
+    assert allclose(t3.beats[0:5], [0.744, 1.569, 2.447, 3.339, 4.208],
+                    rtol=1e-01)
     t4 = hrc.HeartRate('test_data28.csv')
     t4.beat_times()
-    assert allclose(t4.beats[0:5], [0.214, 1.028, 1.842, 2.631, 3.419], rtol=1e-01, atol=0.1)
+    assert allclose(t4.beats[0:5], [0.214, 1.028, 1.842, 2.631, 3.419],
+                    rtol=1e-01, atol=0.1)
     t5 = hrc.HeartRate('test_data31.csv')
     t5.beat_times()
-    assert allclose(t5.beats[0:5], [0.043, 0.793, 1.543, 2.293, 3.043], rtol=1e-01, atol=0.1)
+    assert allclose(t5.beats[0:5], [0.043, 0.793, 1.543, 2.293, 3.043],
+                    rtol=1e-01, atol=0.1)
 
 
 def test_get_duration():
