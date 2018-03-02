@@ -17,6 +17,9 @@ def test_beattimes():
     t4 = hrc.HeartRate('test_data28.csv')
     t4.beat_times()
     assert allclose(t4.beats[0:5], [0.214, 1.028, 1.842, 2.631, 3.419], rtol=1e-01, atol=0.1)
+    t5 = hrc.HeartRate('test_data31.csv')
+    t5.beat_times()
+    assert allclose(t5.beats[0:5], [0.043, 0.793, 1.543, 2.293, 3.043], rtol=1e-01, atol=0.1)
 
 
 def test_get_duration():
@@ -33,9 +36,12 @@ def test_get_duration():
     t4 = hrc.HeartRate('test_data28.csv')
     t4.get_duration()
     assert t4.duration == 27.775
-
+    t5 = hrc.HeartRate('test_data31.csv')
+    t5.get_duration()
+    assert t5.duration == 13.887
 
 def test_findmeanhr():
+    from numpy import isclose
 
     t1 = hrc.HeartRate('test_data1.csv')
     t1.findMeanHR()
@@ -49,6 +55,9 @@ def test_findmeanhr():
     t4 = hrc.HeartRate('test_data28.csv')
     t4.findMeanHR()
     assert t4.mean_hr_bpm == 76
+    t5 = hrc.HeartRate('test_data31.csv')
+    t5.findMeanHR()
+    assert isclose(t5.mean_hr_bpm, 81, atol=1)
 
 
 def test_numbeats():
@@ -65,6 +74,9 @@ def test_numbeats():
     t4 = hrc.HeartRate('test_data28.csv')
     t4.numBeats()
     assert t4.num_beats == 35
+    t5 = hrc.HeartRate('test_data31.csv')
+    t5.numBeats()
+    assert t5.num_beats == 19
 
 
 def test_voltageextremes():
@@ -81,3 +93,6 @@ def test_voltageextremes():
     t4 = hrc.HeartRate('test_data28.csv')
     t4.voltageExtremes()
     assert t4.voltage_extremes == [-0.68, 1.05]
+    t5 = hrc.HeartRate('test_data31.csv')
+    t5.voltageExtremes()
+    assert t5.voltage_extremes == [-0.19375, 0.7875]
