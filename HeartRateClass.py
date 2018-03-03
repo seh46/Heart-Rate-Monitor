@@ -21,6 +21,7 @@ class HeartRate(object):
         """
         import pandas as pd
         import logging
+        import os
 
         self.beats = None
         self.duration = None
@@ -31,6 +32,7 @@ class HeartRate(object):
         try:
             self.df = pd.read_csv(data_file, delimiter=',')
             self.df = self.df.fillna(self.df.mean())
+            self.filename = os.path.splitext(data_file)[0]
         except OSError:
             print('Data file must be located in current directory')
             logging.warning('Data file not found')
@@ -50,6 +52,7 @@ class HeartRate(object):
         except TypeError:
             print('Interval must be a number')
             logging.warning('Interval provided is not numeric')
+        logging.info("Input data read with success")
         self.beat_times()
 
     def beat_times(self):
@@ -69,6 +72,7 @@ class HeartRate(object):
         beat_indices = scs.find_peaks_cwt(volts, widths=np.arange(width_min,
                                                                   width_max))
         self.beats = [self.df.iloc[i, 0] for i in beat_indices]
+        logging.info("Beat times determined")
 
     def get_duration(self):
         """ Find duration of input ECG strip
@@ -78,8 +82,9 @@ class HeartRate(object):
         import logging
 
         dur = self.df.iloc[:, 0].tail(n=1)
-        self.duration = dur[0]
-        logging.info('Duration determined with success.')
+        self.duration = dur
+        self.duration = self.duration.iloc[0]
+        logging.info("Duration of ECG strip has been determined.")
 
     def findMeanHR(self):
         """ Find average heart rate over user-specified number of minutes
@@ -88,26 +93,63 @@ class HeartRate(object):
         """
         import logging
 
-        ints = self.hr_interval/60
-        if ints > self.df.iloc[:, 0].tail(n=1):
-            ints = self.df.iloc[:, 0].tail(n=1)
-        within = self.beats[:, 0] < ints
-        number = self.beats[within]
-        self.mean_hr_bpm = number*60/ints
+        ints = self.hr_interval*60
+        count = 0
+        for i in self.beats:
+            if i < ints:
+                count += 1
+        self.mean_hr_bpm = count*60/ints
+        logging.info('Mean HR over interval of length %s minutes determined to'
+                     ' be %s', ints/60, self.mean_hr_bpm)
 
     def numBeats(self):
         """ Find number of beats in ECG strip
 
         :return: number of beats [int]
         """
+        import logging
+
         self.num_beats = len(self.beats)
+        logging.info('Number of beats is %s', self.num_beats)
 
     def voltageExtremes(self):
         """ Find extrema of input voltage data
 
         :return: list containing maximum and minimum voltages [float]
         """
+        import logging
+
         self.voltage_extremes = []
         x_min = self.df.iloc[:, 1].min()
         x_max = self.df.iloc[:, 1].max()
         self.voltage_extremes = [x_min, x_max]
+        logging.info('Voltage extremes are min: %s, and max: %s', x_min, x_max)
+
+    def output_attributes(self):
+        import json
+        import logging
+
+        self.beat_times()
+        self.numBeats()
+        self.get_duration()
+        self.findMeanHR()
+        self.voltageExtremes()
+
+        rounded_beats = [round(elem, 3) for elem in self.beats]
+        out_beats = json.dumps(rounded_beats)
+        out_number = json.dumps(self.num_beats)
+        out_dur = json.dumps(self.duration)
+        out_HR = json.dumps(self.mean_hr_bpm)
+        out_extremes = json.dumps(self.voltage_extremes)
+        all_out = {
+            "Beat times": out_beats,
+            "Number of beats": out_number,
+            "Duration of ECG strip": out_dur,
+            "Average heart rate over interval": out_HR,
+            "Extrema of voltage readings": out_extremes
+        }
+        name = self.filename + '.json'
+        with open(name, 'w') as outfile:
+            json.dump(all_out, outfile)
+
+        logging.info("ECG data attributes successfully written to JSON file")
