@@ -153,3 +153,4 @@ class HeartRate(object):
             json.dump(all_out, outfile)
 
         logging.info("ECG data attributes successfully written to JSON file")
+        
