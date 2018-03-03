@@ -15,3 +15,5 @@ documentation at this link: http://my-heart-rate-monitor.readthedocs.io/en/lates
 
 You may also call the function output_attributes() in order to generate a JSON file containing
 all attributes that can be generated for the object
+
+[![Build Status](https://travis-ci.org/seh46/Heart-Rate-Monitor.svg?branch=master)](https://travis-ci.org/seh46/Heart-Rate-Monitor)
